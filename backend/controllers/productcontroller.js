@@ -54,19 +54,27 @@ export const add = async (req, res) => {
 
 
 
+
 export const get = async (req, res) => {
     try {
-        const { category } = req.query;
+        const { category, search } = req.query;
 
-        let products;
+        let filter = {};
 
+        // Category filter
         if (category) {
-            products = await productmodel.find({
-                category: category
-            });
-        } else {
-            products = await productmodel.find();
+            filter.category = category;
         }
+
+        // Search by product name or description
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } }
+            ];
+        }
+
+        const products = await productmodel.find(filter);
 
         return res.status(200).json({
             success: true,
@@ -82,4 +90,5 @@ export const get = async (req, res) => {
         });
     }
 };
+
 
