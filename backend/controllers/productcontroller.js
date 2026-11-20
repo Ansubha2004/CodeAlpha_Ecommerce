@@ -51,3 +51,35 @@ export const add = async (req, res) => {
         });
     }
 };
+
+
+
+export const get = async (req, res) => {
+    try {
+        const { category } = req.query;
+
+        let products;
+
+        if (category) {
+            products = await productmodel.find({
+                category: category
+            });
+        } else {
+            products = await productmodel.find();
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Products fetched successfully",
+            data: products
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching products",
+            error: error.message
+        });
+    }
+};
+
