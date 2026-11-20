@@ -2,12 +2,20 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import './config/db.js';
+import connectDB from "./config/db.js";
+import productroutes from "./routes/productroutes.js"
 
 dotenv.config();
+connectDB();
+
 const app=express();
 app.use(cors({
-    origin:'http://localhost:5173',
+    origin:[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:4173"
+    ],
+    methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true
 }));
 app.use(express.json());
@@ -15,9 +23,11 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 
 
-app.get('/test',(req,res)=>{
+app.get('/',(req,res)=>{
     res.send('ShopxEase Backend is Running');
 });
+
+app.use("/productapi",productroutes);
 
 app.use((req,res)=>{
     res.status(404).json({

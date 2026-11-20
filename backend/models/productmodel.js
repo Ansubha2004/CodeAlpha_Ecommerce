@@ -25,11 +25,6 @@ const productSchema = new mongoose.Schema({
     imageid:{
         type: String,
         unique:true
-    },
-    quantity:{
-        type:Number,
-        required:true
-
     }
     
 });
