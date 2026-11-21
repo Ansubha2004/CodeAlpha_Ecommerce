@@ -1,10 +1,40 @@
-import React from "react";
+import React,{useState} from "react";
 import { Mail, LockKeyhole } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
+
+  const [formdata,setformdata]=useState({
+    email:"",
+    password:""
+  })
+  const navigate=useNavigate();
+
+  const handlechange=(e)=>{
+    const {name,value}=e.target;
+    const shallowcopy={...formdata};
+    shallowcopy[name]=value;
+    setformdata(shallowcopy);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const {email,password}=formdata;
+    if(!email || !password)
+    {
+      console.log("Fill all parameters");
+      return 
+    }
+    try{
+      console.log("preparing logic")
+
+    }
+    catch(error)
+    {
+      console.error("Login Error:", error);
+      alert("Login error!!")
+    }
   };
 
   return (
@@ -29,6 +59,9 @@ function Login() {
 
             <input
               type="email"
+              name="email"
+              onChange={handlechange}
+              value={formdata.email}
               placeholder="Email Address"
               required
               className="w-full outline-none border-none px-4 text-gray-700 placeholder:text-gray-400 bg-transparent"
@@ -39,7 +72,10 @@ function Login() {
             <LockKeyhole size={21} className="text-slate-800 shrink-0" />
 
             <input
+            name="password"
+            value={formdata.password}
               type="password"
+              onChange={handlechange}
               placeholder="Password"
               required
               className="w-full outline-none border-none px-4 text-gray-700 placeholder:text-gray-400 bg-transparent"
