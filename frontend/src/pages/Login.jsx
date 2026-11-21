@@ -10,6 +10,8 @@ function Login() {
     password:""
   })
   const navigate=useNavigate();
+  const url = import.meta.env.VITE_API_URL;
+
 
   const handlechange=(e)=>{
     const {name,value}=e.target;
@@ -18,7 +20,7 @@ function Login() {
     setformdata(shallowcopy);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const {email,password}=formdata;
     if(!email || !password)
@@ -27,7 +29,19 @@ function Login() {
       return 
     }
     try{
-      console.log("preparing logic")
+      const result = await axios.post(`${url}/authapi/login`,formdata,{ withCredentials: true,});
+      if (result.data.success) {
+        
+
+        setformdata({
+          name: "",
+          email: "",
+          password: "",
+        });
+
+        navigate("/Home");
+        alert("Login successful!");
+      } 
 
     }
     catch(error)
