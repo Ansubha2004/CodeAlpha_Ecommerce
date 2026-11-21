@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from "./config/db.js";
 import productroutes from "./routes/productroutes.js"
+import userauthroutes from "./routes/userauthroutes.js"
 
 dotenv.config();
 connectDB();
@@ -28,6 +29,7 @@ app.get('/',(req,res)=>{
 });
 
 app.use("/productapi",productroutes);
+app.use("/authapi",userauthroutes);
 
 app.use((req,res)=>{
     res.status(404).json({
