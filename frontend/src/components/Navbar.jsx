@@ -1,8 +1,22 @@
-
 import React from "react";
 import { Heart, User, ShoppingCart, Search } from "lucide-react";
 
-function Navbar() {
+function Navbar({ onCategoryChange,onSearchChange }) {
+  const categories = [
+    "All",
+    "Electronics",
+    "Clothing",
+    "Home & Garden",
+    "Sports",
+    "Books",
+  ];
+
+  const handlesearch=(e)=>{
+    onSearchChange(e.target.value);
+  }
+
+  
+
   return (
     <div
       id="navbar"
@@ -17,6 +31,7 @@ function Navbar() {
             <Search size={18} className="text-gray-400" />
             <input
               type="text"
+              onChange={handlesearch}
               placeholder="Search products..."
               className="w-full outline-none border-none px-3 text-sm text-gray-700 placeholder:text-gray-400"
             />
@@ -34,18 +49,18 @@ function Navbar() {
           </div>
         </div>
         <div className="h-11 flex items-center gap-10 border-t border-gray-100 text-sm font-medium text-gray-800">
-          {["Electronics", "Clothing", "Home & Garden", "Sports", "Books"].map(
-            (category) => (
-              <button
-                key={category}
-                className="hover:text-blue-600 transition whitespace-nowrap"
-              >
-                {category}
-              </button>
-            )
-          )}
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => {
+                onCategoryChange(category);
+              }}
+              className="hover:text-blue-600 transition whitespace-nowrap"
+            >
+              {category}
+            </button>
+          ))}
         </div>
-
       </div>
     </div>
   );

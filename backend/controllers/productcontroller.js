@@ -57,20 +57,20 @@ export const add = async (req, res) => {
 
 export const get = async (req, res) => {
     try {
-        const { category, search } = req.query;
+        const { category } = req.params;
+        const { search } = req.query;
 
         let filter = {};
 
-        // Category filter
-        if (category) {
+        if (category && category !== "All") {
             filter.category = category;
         }
-
-        // Search by product name or description
         if (search) {
+            const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
             filter.$or = [
-                { name: { $regex: search, $options: "i" } },
-                { description: { $regex: search, $options: "i" } }
+                { name: { $regex: escapedSearch, $options: "i" } },
+                { description: { $regex: escapedSearch, $options: "i" } }
             ];
         }
 
@@ -90,5 +90,3 @@ export const get = async (req, res) => {
         });
     }
 };
-
-

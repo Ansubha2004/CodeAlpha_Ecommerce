@@ -5,6 +5,6 @@ import {add,get} from "../controllers/productcontroller.js";
 const router=express.Router();
 
 router.post("/addproduct",upload.single('image'),add);
-router.get("/getproduct",get);
+router.get("/getproduct/:category",get);
 
 export default router;
