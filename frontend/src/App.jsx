@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
 import Productdetails from "./pages/ProductDetails.jsx"
+import Cart from "./pages/Cart.jsx"
 import axios from "axios";
 
 function App() {
@@ -131,6 +132,14 @@ function App() {
           element={
             <ProtectedRoute user={user} loading={loading}>
               <Productdetails user={user} wishlist={wishlist} setWishlist={setWishlist}/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute user={user} loading={loading}>
+              <Cart user={user} />
             </ProtectedRoute>
           }
         />

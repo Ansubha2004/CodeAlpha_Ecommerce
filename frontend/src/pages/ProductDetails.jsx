@@ -102,7 +102,7 @@ function ProductDetails({ user, wishlist, setWishlist }) {
               Category: {product?.category}
             </p>
 
-            {/*<div className="flex items-center gap-5 mt-8">
+            <div className="flex items-center gap-5 mt-8">
               <span className="font-semibold text-gray-800">Quantity:</span>
 
               <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
@@ -116,7 +116,7 @@ function ProductDetails({ user, wishlist, setWishlist }) {
                   <Plus size={17} />
                 </button>
               </div>
-            </div>*/}
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
               <button className="flex items-center col-span-2 justify-center gap-2 bg-[#102c57] text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">

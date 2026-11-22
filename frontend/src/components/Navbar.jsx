@@ -94,12 +94,17 @@ function Navbar({ onCategoryChange, user, onSearchChange, logout ,favlength}) {
               )}
             </div>
 
-            <button
-              disabled={!user}
-              className="hover:text-blue-600 disabled:cursor-not-allowed disabled:hover:text-slate-900 transition"
+            <Link
+              to={user ? "/cart" : "#"}
+              onClick={(e) => !user && e.preventDefault()}
+              className="hover:text-blue-600 transition"
             >
-              <ShoppingCart size={21} />
-            </button>
+              <ShoppingCart
+                size={21}
+                className={!user ? "opacity-40 cursor-not-allowed" : ""}
+              />
+              
+            </Link>
           </div>
         </div>
 
