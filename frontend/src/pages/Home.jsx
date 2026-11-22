@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Productcard from "../components/productcard.jsx";
 import axios from "axios";
 
-function Home({ selectedCategory,user, searchProduct }) {
+function Home({ selectedCategory,user, searchProduct,wishlist,setWishlist }) {
   const [products, setProducts] = useState([]);
   const url = import.meta.env.VITE_API_URL;
 
@@ -37,11 +37,15 @@ function Home({ selectedCategory,user, searchProduct }) {
           products.map((product) => (
             <Productcard
               key={product._id}
+              _id={product._id}
               name={product.name}
               price={product.price}
               description={product.description}
               image={product.image}
               category={product.category}
+              wishlist={wishlist}
+              setWishlist={setWishlist}
+              
             />
           ))
         ) : (

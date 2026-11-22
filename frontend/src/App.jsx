@@ -16,6 +16,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState(null);
+  const [wishlist, setWishlist] = useState([]);
+
   const url = import.meta.env.VITE_API_URL;
   const logout = async () => {
     try {
@@ -56,15 +58,35 @@ function App() {
       return false;
     }
   };
+  
+  const getwishlist = async () => {
+    try {
+      const result = await axios.get(`${url}/wishlistapi/getwishlist`, {
+        withCredentials: true,
+      });
+
+      if (result.data.success) {
+        setWishlist(result.data.data);
+      }
+    } catch (error) {
+      console.log("Wishlist fetch error:", error);
+      return;
+    }
+  };
+
+ 
+
 
   useEffect(() => {
     const checkUser = async () => {
+      
       await refreshUser();
       setLoading(false);
     };
 
     checkUser();
-  }, [url]);
+    getwishlist();
+  }, [url,wishlist]);
 
   return (
     <div className="relative w-screen h-screen min-h-screen overflow-x-hidden font-sans text-slate-800 antialiased">
@@ -88,6 +110,8 @@ function App() {
                 selectedCategory={category}
                 user={user}
                 searchProduct={search}
+                wishlist={wishlist}
+                setWishlist={setWishlist}
               />
             </ProtectedRoute>
           }
@@ -97,7 +121,7 @@ function App() {
           path="/Wishlist"
           element={
             <ProtectedRoute user={user} loading={loading}>
-              <Wishlist user={user} />
+              <Wishlist user={user} wishlist={wishlist} setWishlist={setWishlist}/>
             </ProtectedRoute>
           }
         />

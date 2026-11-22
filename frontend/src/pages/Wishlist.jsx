@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import {
   Heart,
@@ -11,35 +11,26 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-function Wishlist({ user }) {
+function Wishlist({ user,wishlist,setWishlist }) {
   const navigate = useNavigate();
-  const url = import.meta.env.VITE_API_URL;
-
-  const [wishlist, setWishlist] = useState([]);
-
-  const getwishlist = async () => {
-    try {
-      const result = await axios.get(`${url}/wishlistapi/getwishlist`, {
-        withCredentials: true,
-      });
-
-      if (result.data.success) {
-        setWishlist(result.data.data);
-      }
-    } catch (error) {
-      console.log("Wishlist fetch error:", error);
+  const url=import.meta.env.VITE_API_URL;
+  const removeWishlist=async (id)=>{
+    try
+    {
+      const result=await axios.delete(`${url}/wishlistapi/removewishlist/${id}`,{
+        withCredentials:true
+    });
+    if(result.data.success)
+    {
+        setWishlist((prev)=>prev.filter((item)=>item._id!==id));
+    }
+    }
+    catch(error)
+    {
+      console.log("Error removing favourite from wishlist page");
       return;
     }
-  };
-
-  useEffect(() => {
-    getwishlist();
-    
-  }, []);
-
-  const removeWishlist = (id) => {
-    setWishlist((prev) => prev.filter((item) => item._id !== id));
-  };
+  }
 
   return (
     <section className="min-h-screen bg-slate-50 pt-32 pb-16 px-4">
@@ -112,7 +103,7 @@ function Wishlist({ user }) {
                   key={product._id}
                   className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300 group"
                 >
-                  {/* Image */}
+       
                   <div className="relative h-60 bg-gray-50 overflow-hidden">
                     <img
                       src={product.image}
