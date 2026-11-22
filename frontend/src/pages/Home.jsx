@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Productcard from "../components/productcard.jsx";
 import axios from "axios";
 
-function Home({ selectedCategory, searchProduct }) {
+function Home({ selectedCategory,user, searchProduct }) {
   const [products, setProducts] = useState([]);
   const url = import.meta.env.VITE_API_URL;
 

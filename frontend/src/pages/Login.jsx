@@ -3,7 +3,7 @@ import { Mail, LockKeyhole } from "lucide-react";
 import { Link,useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Login() {
+function Login({refreshUser}) {
 
   const [formdata,setformdata]=useState({
     email:"",
@@ -38,8 +38,8 @@ function Login() {
           email: "",
           password: "",
         });
-
-        navigate("/Home");
+        await refreshUser();
+        navigate("/");
         alert("Login successful!");
       } 
 

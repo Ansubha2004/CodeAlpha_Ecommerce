@@ -4,6 +4,14 @@ import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
 dotenv.config();
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 10 * 60 * 60 * 1000,
+    path: "/"
+};
+
 export const register = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -58,12 +66,7 @@ export const login = async (req, res) => {
             name: finduser.name
         }, process.env.JWT_SECRET);
 
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none',
-            maxAge: 10 * 60 * 60 * 1000 // 10 hours in milliseconds
-        })
+        res.cookie('token', token, cookieOptions)
         return res.json({ success: true, message: "User logged in successfully", user: finduser });
 
     }
@@ -76,54 +79,51 @@ export const login = async (req, res) => {
     }
 };
 
-export const logout = async (req, res) => { 
-    try{
-        res.cookie('token', "");
-        return res.json({success:true,message:"logout sucessfull"})
+export const logout = async (req, res) => {
+    try {
+        res.clearCookie("token", cookieOptions);
+
+        return res.status(200).json({
+            success: true,
+            message: "Logout successful"
+        });
     }
-    catch(err)
-    {
-        console.log(err)
-        return res.json({success:false,message:"Logout issues"})
-        
+    catch (err) {
+        console.log(err);
+
+        return res.status(500).json({
+            success: false,
+            message: "Logout failed"
+        });
     }
 };
 
 
 
-export const profile=async (req,res)=>{
-    try{
-        const token=req.cookies.token;
-        if(!token)
-        {
-            return res.json({
-                success:false,
-                message:"Please login first"
-            })
-        }
-        const decode=jwt.verify(token,process.env.JWT_SECRET);
-        const user=await usermodel.findById(decode.id).select("-password");
 
-        if (!user) {
-            return res.status(404).json({
-              success: false,
-              message: "User not found"
-            });
-          }
-      
-          return res.status(200).json({
-            success: true,
-            data: user
-          });
-
-
+export const profile = async (req, res) => {
+    try {
+      const user = await usermodel
+        .findById(req.user.id)
+        .select("-password");
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        data: user,
+      });
+  
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Error fetching profile",
+      });
     }
-    catch(error)
-    {
-        return res.status(401).json({
-            success: false,
-            message: "Invalid or expired token",
-            error
-          });
-    }
-}
+  };
+  

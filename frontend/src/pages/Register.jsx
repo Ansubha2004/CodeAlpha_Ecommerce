@@ -3,7 +3,7 @@ import { User, Mail, LockKeyhole, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Register() {
+function Register({refreshUser}) {
   const navigate = useNavigate();
   const url = import.meta.env.VITE_API_URL;
 
@@ -45,7 +45,7 @@ function Register() {
           email: "",
           password: "",
         });
-
+        await refreshUser();
         navigate("/");
         alert("Registration successful!");
       }
