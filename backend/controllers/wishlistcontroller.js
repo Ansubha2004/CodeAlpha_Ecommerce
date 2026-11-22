@@ -46,27 +46,59 @@ export const addtowishlist = async (req, res) => {
 
 
 
-export const getwishlist=async (req,res)=>{
-    try
-    {
-        const user=await usermodel.findById(req.user.id).populate("favourites");
+export const getwishlist = async (req, res) => {
+    try {
+        const user = await usermodel.findById(req.user.id).populate("favourites");
         if (!user) {
             return res.status(404).json({
-              success: false,
-              message: "User not found",
+                success: false,
+                message: "User not found",
             });
-          }
-      
-          return res.status(200).json({
+        }
+
+        return res.status(200).json({
             success: true,
             data: user.favourites,
-          });
+        });
     }
     catch (error) {
         return res.status(500).json({
-          success: false,
-          message: "Error fetching wishlist",
-          error: error.message,
+            success: false,
+            message: "Error fetching wishlist",
+            error: error.message,
         });
-      }
+    }
+}
+
+
+
+export const removewishlist = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const productId = req.params.id;
+        const user = await usermodel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+
+        user.favourites = user.favourites.filter((id) => id.toString() !== productId);
+        await user.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Product removed from wishlist successfully",
+        });
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Error removing product from wishlist",
+            error: error.message,
+        });
+    }
 }
