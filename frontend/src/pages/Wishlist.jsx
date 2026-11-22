@@ -8,6 +8,7 @@ import {
   PackageOpen,
   Sparkles,
   Axis3DIcon,
+  Info
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +32,20 @@ function Wishlist({ user,wishlist,setWishlist }) {
       return;
     }
   }
+  const openProduct = (product) => {
+    navigate(`/product/${product._id}`, {
+      state: {
+        product: {
+          _id: product._id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          category: product.category,
+          image: product.image,
+        },
+      },
+    });
+  };
 
   return (
     <section className="min-h-screen bg-slate-50 pt-32 pb-16 px-4">
@@ -141,9 +156,9 @@ function Wishlist({ user,wishlist,setWishlist }) {
                       </p>
                     </div>
 
-                    <button className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 active:scale-95 transition">
-                      <ShoppingCart size={17} />
-                      Add to Cart
+                    <button onClick={()=>openProduct(product)} className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-xl text-sm font-semibold hover:bg-blue-700 active:scale-95 transition">
+                      <Info size={17} />
+                      Product Details
                     </button>
                   </div>
                 </div>

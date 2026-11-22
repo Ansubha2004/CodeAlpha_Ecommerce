@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Heart, User, ShoppingCart, Search, LogOut } from "lucide-react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link,useNavigate} from "react-router-dom";
+
 
 function Navbar({ onCategoryChange, user, onSearchChange, logout ,favlength}) {
   const [showProfile, setShowProfile] = useState(false);
+  const navigate=useNavigate()
 
   const categories = [
     "All",
@@ -16,6 +18,7 @@ function Navbar({ onCategoryChange, user, onSearchChange, logout ,favlength}) {
   ];
 
   const handlesearch = (e) => {
+    navigate("/");
     onSearchChange(e.target.value);
   };
 
@@ -105,6 +108,7 @@ function Navbar({ onCategoryChange, user, onSearchChange, logout ,favlength}) {
             <button
               key={category}
               onClick={() => {
+                navigate("/")
                 onCategoryChange(category);
               }}
               className="hover:text-blue-600 transition whitespace-nowrap"

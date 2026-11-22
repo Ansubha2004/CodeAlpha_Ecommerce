@@ -8,6 +8,7 @@ import Register from "./pages/Register.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
+import Productdetails from "./pages/ProductDetails.jsx"
 import axios from "axios";
 
 function App() {
@@ -122,6 +123,14 @@ function App() {
           element={
             <ProtectedRoute user={user} loading={loading}>
               <Wishlist user={user} wishlist={wishlist} setWishlist={setWishlist}/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+            <ProtectedRoute user={user} loading={loading}>
+              <Productdetails user={user} wishlist={wishlist} setWishlist={setWishlist}/>
             </ProtectedRoute>
           }
         />
