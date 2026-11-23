@@ -6,7 +6,7 @@ import connectDB from "./config/db.js";
 import productroutes from "./routes/productroutes.js"
 import userauthroutes from "./routes/userauthroutes.js"
 import wishlistroutes from "./routes/wishlistroutes.js"
-
+import cartroutes from "./routes/cartroutes.js"
 dotenv.config();
 connectDB();
 
@@ -32,6 +32,7 @@ app.get('/',(req,res)=>{
 app.use("/productapi",productroutes);
 app.use("/authapi",userauthroutes);
 app.use("/wishlistapi",wishlistroutes);
+app.use("/cartapi",cartroutes);
 
 app.use((req,res)=>{
     res.status(404).json({

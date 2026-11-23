@@ -8,7 +8,7 @@ import Register from "./pages/Register.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
-import Productdetails from "./pages/ProductDetails.jsx"
+import Productdetails from "./pages/ProductDetails.jsx";
 import Cart from "./pages/Cart.jsx"
 import axios from "axios";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Heart, ShoppingCart, Minus, Plus, ArrowLeft } from "lucide-react";
 import axios from "axios";
@@ -9,6 +9,7 @@ function ProductDetails({ user, wishlist, setWishlist }) {
   // Get selected product from navigation state
   const product = location.state?.product;
   const url = import.meta.env.VITE_API_URL;
+  const [quantity, setQuantity] = useState(1);
   const isfavourite = wishlist.some(
     (item) => item._id?.toString() === product?._id?.toString(),
   );
@@ -43,6 +44,23 @@ function ProductDetails({ user, wishlist, setWishlist }) {
         "Wishlist error add remove:",
         error.response?.data || error.message,
       );
+    }
+  };
+
+  const addtocart = async () => {
+    try {
+      const result = await axios.post(
+        `${url}/cartapi/addtocart/${product._id}`,
+        { quantity },
+        { withCredentials: true },
+      );
+      if (result.data.success) {
+        alert("Product added to cart successfully");
+
+        navigate("/cart")
+      }
+    } catch (error) {
+      console.log("Failed to add to cart:", error);
     }
   };
 
@@ -106,25 +124,34 @@ function ProductDetails({ user, wishlist, setWishlist }) {
               <span className="font-semibold text-gray-800">Quantity:</span>
 
               <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
-                <button className="p-3 hover:bg-gray-100">
+                <button
+                  onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                  className="p-3 hover:bg-gray-100"
+                >
                   <Minus size={17} />
                 </button>
 
-                <span className="px-5 font-semibold text-gray-800">1</span>
+                <span className="px-5 font-semibold text-gray-800">
+                  {quantity}
+                </span>
 
-                <button className="p-3 hover:bg-gray-100">
+                <button
+                  onClick={() => setQuantity((prev) => prev + 1)}
+                  className="p-3 hover:bg-gray-100"
+                >
                   <Plus size={17} />
                 </button>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-              <button className="flex items-center col-span-2 justify-center gap-2 bg-[#102c57] text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+              <button
+                onClick={addtocart}
+                className="flex items-center col-span-2 justify-center gap-2 bg-[#102c57] text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition"
+              >
                 <ShoppingCart size={18} />
                 Add to Cart
               </button>
-
-             
             </div>
           </div>
         </div>
