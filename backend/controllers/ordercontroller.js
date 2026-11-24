@@ -1,5 +1,6 @@
 import ordermodel from "../models/ordermodel.js";
 import usermodel from "../models/usermodel.js";
+import {orderstatus} from "../utils/orderstatus.js"
 
 
 export const placeorder=async (req,res)=>{
@@ -62,6 +63,8 @@ export const placeorder=async (req,res)=>{
         user.cart=[];
         await user.save();
 
+        orderstatus(neworder);
+
         return res.status(201).json({
             success: true,
             message: "Order placed successfully",
@@ -108,3 +111,4 @@ export const orderhistory=async (req,res)=>{
         })
     }
 }
+

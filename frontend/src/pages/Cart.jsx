@@ -12,7 +12,6 @@ function Cart({ user }) {
     try {
       const result = await axios.delete(
         `
-        
         ${url}/cartapi/removespecificcart/${id}`,
         { withCredentials: true },
       );

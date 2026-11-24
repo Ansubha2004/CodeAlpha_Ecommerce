@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Checkout({ onBack,products }) {
+function Checkout({ onBack, products }) {
   const [formdata, setFormdata] = useState({
     name: "",
     address: "",
@@ -22,7 +22,6 @@ function Checkout({ onBack,products }) {
   const url = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -31,7 +30,10 @@ function Checkout({ onBack,products }) {
     setFormdata(shallowcopy);
   };
 
-  const total = products.reduce((t, item) => t + item.product.price * item.quantity, 0);
+  const total = products.reduce(
+    (t, item) => t + item.product.price * item.quantity,
+    0,
+  );
 
   const submitform = async (e) => {
     e.preventDefault();
@@ -164,7 +166,7 @@ function Checkout({ onBack,products }) {
 
                   <label
                     className={`flex flex-1 items-center gap-2 border rounded-lg p-3 cursor-pointer transition-all ${
-                      formdata.payment === "ONLINE"
+                      formdata.payment === "Online"
                         ? "border-blue-600 bg-blue-50"
                         : "border-gray-200"
                     }`}
@@ -172,10 +174,9 @@ function Checkout({ onBack,products }) {
                     <input
                       type="radio"
                       name="payment"
-                      value="ONLINE"
-                      checked={formdata.payment === "ONLINE"}
+                      value="Online"
+                      checked={formdata.payment === "Online"}
                       onChange={handleChange}
-                      className="accent-blue-700"
                     />
 
                     <CreditCard size={18} className="text-[#102c59]" />

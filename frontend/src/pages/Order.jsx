@@ -28,6 +28,12 @@ function Order({ user }) {
 
   useEffect(() => {
     fetchorderhistory();
+  
+    const interval = setInterval(() => {
+      fetchorderhistory();
+    }, 1000);
+  
+    return () => clearInterval(interval);
   }, []);
 
   const toggleDetails = (id) => {
