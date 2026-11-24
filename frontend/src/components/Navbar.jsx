@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Heart, User, ShoppingCart, Search, LogOut } from "lucide-react";
 import axios from "axios";
-import {Link,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-
-function Navbar({ onCategoryChange, user, onSearchChange, logout ,favlength}) {
+function Navbar({ onCategoryChange, user, onSearchChange, logout, favlength }) {
   const [showProfile, setShowProfile] = useState(false);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const categories = [
     "All",
@@ -53,10 +52,8 @@ function Navbar({ onCategoryChange, user, onSearchChange, logout ,favlength}) {
                 size={21}
                 className={!user ? "opacity-40 cursor-not-allowed" : ""}
               />
-              
             </Link>
-    
-           
+
             <div className="relative">
               <button
                 disabled={!user}
@@ -103,24 +100,28 @@ function Navbar({ onCategoryChange, user, onSearchChange, logout ,favlength}) {
                 size={21}
                 className={!user ? "opacity-40 cursor-not-allowed" : ""}
               />
-              
             </Link>
           </div>
         </div>
 
-        <div className="h-11 flex items-center gap-10 border-t border-gray-100 text-sm font-medium text-gray-800">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => {
-                navigate("/")
-                onCategoryChange(category);
-              }}
-              className="hover:text-blue-600 transition whitespace-nowrap"
-            >
-              {category}
-            </button>
-          ))}
+        <div className="flex justify-between">
+          <div className="h-11 flex items-center gap-10 border-t border-gray-100 text-sm font-medium text-gray-800">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => {
+                  navigate("/");
+                  onCategoryChange(category);
+                }}
+                className="hover:text-blue-600 transition  whitespace-nowrap"
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+          <Link to="/orderhistory" className="hover:text-blue-600 h-11 flex items-center gap-10 border-t border-gray-100 text-sm font-medium text-gray-800 transition whitespace-nowrap">
+            Order History
+          </Link>
         </div>
       </div>
     </div>

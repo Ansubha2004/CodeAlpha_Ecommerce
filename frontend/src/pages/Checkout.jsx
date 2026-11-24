@@ -7,37 +7,61 @@ import {
   Wallet,
   CreditCard,
   ShieldCheck,
+  HandleBottomRightIcon,
 } from "lucide-react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Checkout({ onBack }) {
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [formdata, setFormdata] = useState({
+    name: "",
+    address: "",
+    mobile: "",
+    payment: "COD",
+  });
+  const url = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
 
-  const products = [
-    {
-      _id: "1",
-      name: "Wireless Bluetooth Headphones",
-      image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150",
-      price: 299.99,
-      quantity: 1,
-    },
-    {
-      _id: "2",
-      name: "Smart Watch Series 7",
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=150",
-      price: 399.99,
-      quantity: 1,
-    },
-  ];
+  const [products, setProducts] = useState([]);
 
-  const subtotal = products.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0,
-  );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-  const delivery = 50;
-  const total = subtotal + delivery;
+    const shallowcopy = { ...formdata };
+    shallowcopy[name] = value;
+    setFormdata(shallowcopy);
+  };
+
+  const total = products.reduce((t, item) => t + item.price * item.quantity, 0);
+
+  const submitform = async (e) => {
+    e.preventDefault();
+    const { name, address, mobile, payment } = formdata;
+    try {
+      const result = await axios.post(`${url}/orderapi/placeorder`, formdata, {
+        withCredentials: true,
+      });
+      if (result.data.success) {
+        setFormdata({
+          name: "",
+          address: "",
+          mobile: "",
+          payment: "COD",
+        });
+        alert("Order placed successfully!");
+        navigate("/orderhistory");
+      }
+    } catch (error) {
+      console.log("Error while form submission", error, formdata);
+      setFormdata({
+        name: "",
+        address: "",
+        mobile: "",
+        payment: "COD",
+      });
+      return;
+    }
+  };
 
   return (
     <section
@@ -45,8 +69,6 @@ function Checkout({ onBack }) {
       className="relative mt-32 px-5 pb-16 flex flex-col justify-center items-center z-[1] box-border"
     >
       <div className="w-full max-w-7xl">
-       
-
         <div className="flex items-center gap-3 mb-6">
           <button
             type="button"
@@ -60,20 +82,12 @@ function Checkout({ onBack }) {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-6">
-          
-
           <div>
             <h3 className="text-base font-bold text-slate-800 mb-4">
               Delivery Information
             </h3>
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert(`Selected Payment Method: ${paymentMethod}`);
-              }}
-              className="space-y-4"
-            >
+            <form onSubmit={submitform} className="space-y-4">
               <div className="relative">
                 <User
                   size={17}
@@ -81,6 +95,9 @@ function Checkout({ onBack }) {
                 />
                 <input
                   type="text"
+                  name="name"
+                  value={formdata.name}
+                  onChange={handleChange}
                   placeholder="Full Name"
                   required
                   className="w-full border border-gray-200 rounded-lg py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500"
@@ -94,6 +111,9 @@ function Checkout({ onBack }) {
                 <input
                   type="text"
                   placeholder="Delivery Address"
+                  name="address"
+                  value={formdata.address}
+                  onChange={(e) => handleChange(e)}
                   required
                   className="w-full border border-gray-200 rounded-lg py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500"
                 />
@@ -105,13 +125,15 @@ function Checkout({ onBack }) {
                 />
                 <input
                   type="tel"
+                  name="mobile"
+                  value={formdata.mobile}
+                  onChange={(e) => handleChange(e)}
                   placeholder="Phone Number"
                   required
                   className="w-full border border-gray-200 rounded-lg py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500"
                 />
               </div>
-              
-             
+
               <div className="pt-2">
                 <h3 className="text-sm font-bold text-slate-800 mb-3">
                   Payment Method
@@ -120,7 +142,7 @@ function Checkout({ onBack }) {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <label
                     className={`flex flex-1 items-center gap-2 border rounded-lg p-3 cursor-pointer transition-all ${
-                      paymentMethod === "COD"
+                      formdata.payment === "COD"
                         ? "border-blue-600 bg-blue-50"
                         : "border-gray-200"
                     }`}
@@ -129,8 +151,8 @@ function Checkout({ onBack }) {
                       type="radio"
                       name="payment"
                       value="COD"
-                      checked={paymentMethod === "COD"}
-                      onChange={() => setPaymentMethod("COD")}
+                      checked={formdata.payment === "COD"}
+                      onChange={handleChange}
                       className="accent-blue-700"
                     />
 
@@ -143,7 +165,7 @@ function Checkout({ onBack }) {
 
                   <label
                     className={`flex flex-1 items-center gap-2 border rounded-lg p-3 cursor-pointer transition-all ${
-                      paymentMethod === "ONLINE"
+                      formdata.payment === "ONLINE"
                         ? "border-blue-600 bg-blue-50"
                         : "border-gray-200"
                     }`}
@@ -152,8 +174,8 @@ function Checkout({ onBack }) {
                       type="radio"
                       name="payment"
                       value="ONLINE"
-                      checked={paymentMethod === "ONLINE"}
-                      onChange={() => setPaymentMethod("ONLINE")}
+                      checked={formdata.payment === "ONLINE"}
+                      onChange={handleChange}
                       className="accent-blue-700"
                     />
 
@@ -165,13 +187,12 @@ function Checkout({ onBack }) {
                   </label>
                 </div>
               </div>
-              
-             
+
               <button
                 type="submit"
                 className="w-full bg-[#102c59] hover:bg-blue-900 text-white font-semibold text-sm py-3 rounded-lg transition-all duration-300"
               >
-                {paymentMethod === "COD"
+                {formdata.payment === "COD"
                   ? "Place Order"
                   : "Continue to Payment"}
               </button>
@@ -209,20 +230,6 @@ function Checkout({ onBack }) {
             </div>
 
             <div className="border-t border-gray-200 mt-4 pt-4 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-600">Subtotal</span>
-                <span className="font-semibold text-slate-800">
-                  ${subtotal.toFixed(2)}
-                </span>
-              </div>
-
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-600">Delivery</span>
-                <span className="font-semibold text-slate-800">
-                  ${delivery.toFixed(2)}
-                </span>
-              </div>
-
               <div className="border-t border-gray-200 pt-3 flex justify-between items-center">
                 <span className="text-base font-bold text-slate-900">
                   Total
@@ -235,7 +242,7 @@ function Checkout({ onBack }) {
               <div className="bg-gray-50 rounded-lg p-3 mt-3">
                 <p className="text-xs text-slate-500">Payment Method</p>
                 <p className="text-sm font-semibold text-[#102c59] mt-1">
-                  {paymentMethod === "COD"
+                  {formdata.payment === "COD"
                     ? "Cash on Delivery"
                     : "Online Payment"}
                 </p>

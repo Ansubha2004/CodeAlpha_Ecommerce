@@ -9,7 +9,8 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
 import Productdetails from "./pages/ProductDetails.jsx";
-import Cart from "./pages/Cart.jsx"
+import Cart from "./pages/Cart.jsx";
+import Order from "./pages/Order.jsx";
 import axios from "axios";
 
 function App() {
@@ -60,7 +61,7 @@ function App() {
       return false;
     }
   };
-  
+
   const getwishlist = async () => {
     try {
       const result = await axios.get(`${url}/wishlistapi/getwishlist`, {
@@ -76,19 +77,15 @@ function App() {
     }
   };
 
- 
-
-
   useEffect(() => {
     const checkUser = async () => {
-      
       await refreshUser();
       setLoading(false);
     };
 
     checkUser();
     getwishlist();
-  }, [url,wishlist]);
+  }, [url, wishlist]);
 
   return (
     <div className="relative w-screen h-screen min-h-screen overflow-x-hidden font-sans text-slate-800 antialiased">
@@ -99,10 +96,21 @@ function App() {
         logout={logout}
       />
       <Routes>
-        <Route path="/login" element={<PublicRoute user={user} loading={loading}><Login refreshUser={refreshUser} /></PublicRoute>} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute user={user} loading={loading}>
+              <Login refreshUser={refreshUser} />
+            </PublicRoute>
+          }
+        />
         <Route
           path="/register"
-          element={<PublicRoute user={user} loading={loading}><Register refreshUser={refreshUser} /></PublicRoute>}
+          element={
+            <PublicRoute user={user} loading={loading}>
+              <Register refreshUser={refreshUser} />
+            </PublicRoute>
+          }
         />
         <Route
           path="/"
@@ -123,7 +131,11 @@ function App() {
           path="/Wishlist"
           element={
             <ProtectedRoute user={user} loading={loading}>
-              <Wishlist user={user} wishlist={wishlist} setWishlist={setWishlist}/>
+              <Wishlist
+                user={user}
+                wishlist={wishlist}
+                setWishlist={setWishlist}
+              />
             </ProtectedRoute>
           }
         />
@@ -131,7 +143,11 @@ function App() {
           path="/product/:id"
           element={
             <ProtectedRoute user={user} loading={loading}>
-              <Productdetails user={user} wishlist={wishlist} setWishlist={setWishlist}/>
+              <Productdetails
+                user={user}
+                wishlist={wishlist}
+                setWishlist={setWishlist}
+              />
             </ProtectedRoute>
           }
         />
@@ -140,6 +156,15 @@ function App() {
           element={
             <ProtectedRoute user={user} loading={loading}>
               <Cart user={user} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orderhistory"
+          element={
+            <ProtectedRoute user={user} loading={loading}>
+              <Order user={user} />
             </ProtectedRoute>
           }
         />
