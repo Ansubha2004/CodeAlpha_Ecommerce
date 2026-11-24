@@ -89,7 +89,7 @@ function Wishlist({ user,wishlist,setWishlist }) {
             </p>
 
             <button
-              onClick={() => navigate("/Home")}
+              onClick={() => navigate("/")}
               className="bg-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-700 transition"
             >
               Explore Products

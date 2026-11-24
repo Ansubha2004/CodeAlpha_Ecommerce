@@ -1,6 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {ShoppingBag} from "lucide-react";
+
 
 function Order({ user }) {
   const [orders, setOrders] = useState([]);
@@ -21,6 +23,8 @@ function Order({ user }) {
       console.log("Error in fetching orderhistory, ", error);
     }
   };
+
+  const navigate=useNavigate();
 
   useEffect(() => {
     fetchorderhistory();
@@ -61,7 +65,6 @@ function Order({ user }) {
                 </p>
               </div>
 
-            
               <div className="flex items-center gap-3">
                 {order.products.map((product, index) => (
                   <div
@@ -123,7 +126,7 @@ function Order({ user }) {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <p>
-                      <span className="text-gray-500">Name:  </span>
+                      <span className="text-gray-500">Name: </span>
                       <span className="font-medium">
                         {order.customer?.name}
                       </span>
@@ -137,7 +140,7 @@ function Order({ user }) {
                     </p>
 
                     <p className="md:col-span-2">
-                      <span className="text-gray-500">Address:  </span>
+                      <span className="text-gray-500">Address: </span>
                       <span className="font-medium">
                         {order.customer?.address}
                       </span>
@@ -184,18 +187,14 @@ function Order({ user }) {
 
                 <div className="mt-5 flex flex-col sm:flex-row justify-between gap-3">
                   <div>
-                    <p className="text-sm text-gray-500">
-                      Payment Method
-                    </p>
+                    <p className="text-sm text-gray-500">Payment Method</p>
                     <p className="font-semibold text-gray-800">
                       {order.payment}
                     </p>
                   </div>
 
                   <div className="sm:text-right">
-                    <p className="text-sm text-gray-500">
-                      Total Amount
-                    </p>
+                    <p className="text-sm text-gray-500">Total Amount</p>
                     <p className="text-xl font-bold text-[#102c59]">
                       ₹{order.total.toFixed(2)}
                     </p>
@@ -207,9 +206,23 @@ function Order({ user }) {
         ))}
 
         {orders.length === 0 && (
-          <p className="text-center text-gray-500 py-10">
-            You haven't placed any orders yet.
-          </p>
+          <div className="flex flex-col items-center justify-center h-100 bg-gray-50 rounded-xl border border-gray-200">
+            <ShoppingBag size={32} className="text-gray-400 mb-3" />
+
+            <h3 className="text-lg font-semibold text-slate-800">
+              No Orders Found
+            </h3>
+
+            <p className="text-sm text-gray-500 mt-1">
+              You haven't placed any orders yet.
+            </p>
+            <button
+              onClick={() => navigate("/")}
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-700 mt-6 transition"
+            >
+              Explore Products
+            </button>
+          </div>
         )}
       </div>
     </section>

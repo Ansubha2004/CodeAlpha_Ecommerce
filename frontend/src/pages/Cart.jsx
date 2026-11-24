@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import Checkout from "./Checkout.jsx";
 import axios from "axios";
-
+import {useNavigate} from "react-router-dom";
 function Cart({ user }) {
   const url = import.meta.env.VITE_API_URL;
   const [showCheckout, setShowCheckout] = useState(false);
@@ -23,6 +23,8 @@ function Cart({ user }) {
       console.log("Error in removing this cart:", error);
     }
   };
+
+  const navigate=useNavigate();
 
   const getcart = async () => {
     try {
@@ -71,7 +73,9 @@ function Cart({ user }) {
   );
 
   if (showCheckout) {
-    return <Checkout onBack={() => setShowCheckout(false)} />;
+    return (
+      <Checkout onBack={() => setShowCheckout(false)} products={products} />
+    );
   }
 
   return (
@@ -87,9 +91,17 @@ function Cart({ user }) {
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start">
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm px-4 md:px-6">
             {products.length === 0 ? (
-              <p className="py-8 text-center text-gray-500">
-                Your cart is empty.
-              </p>
+              <div className="flex flex-col h-100 gap-10 justify-center items-center">
+                <p className=" text-center  text-gray-500">
+                  Your cart is empty.
+                </p>
+                <button
+                  onClick={() => navigate("/")}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-700 transition"
+                >
+                  Explore Products
+                </button>
+              </div>
             ) : (
               products
                 .map((item) => (

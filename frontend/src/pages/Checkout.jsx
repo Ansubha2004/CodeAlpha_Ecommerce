@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Checkout({ onBack }) {
+function Checkout({ onBack,products }) {
   const [formdata, setFormdata] = useState({
     name: "",
     address: "",
@@ -22,7 +22,6 @@ function Checkout({ onBack }) {
   const url = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
-  const [products, setProducts] = useState([]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +31,7 @@ function Checkout({ onBack }) {
     setFormdata(shallowcopy);
   };
 
-  const total = products.reduce((t, item) => t + item.price * item.quantity, 0);
+  const total = products.reduce((t, item) => t + item.product.price * item.quantity, 0);
 
   const submitform = async (e) => {
     e.preventDefault();
@@ -208,14 +207,14 @@ function Checkout({ onBack }) {
               {products.map((item) => (
                 <div key={item._id} className="flex items-center gap-3">
                   <img
-                    src={item.image}
-                    alt={item.name}
+                    src={item.product.image}
+                    alt={item.product.name}
                     className="w-11 h-11 rounded-lg object-cover bg-gray-100"
                   />
 
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-slate-700 line-clamp-2">
-                      {item.name}
+                      {item.product.name}
                     </p>
                     <p className="text-xs text-slate-500">
                       Qty: {item.quantity}
@@ -223,7 +222,7 @@ function Checkout({ onBack }) {
                   </div>
 
                   <p className="text-xs font-semibold text-slate-800 whitespace-nowrap">
-                    ${item.price.toFixed(2)}
+                    ${item.product.price.toFixed(2)}
                   </p>
                 </div>
               ))}
